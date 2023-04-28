@@ -50,7 +50,6 @@ Cuihong Zhang, Ruosha Li <Ruosha.Li@uth.tmc.edu>
 }
 \examples{
 ## load required data
-require("survival")
 data(simda)
 head(da.long)
 da.id <- subset(da.long, v.time==0)
@@ -62,7 +61,7 @@ out <- DRS.JM(coxForm = ~ Lt1 + Lt2 + Lt3 + Lt4 + Lt5,
               jmCoxForm1 = Surv(obsT, delta==1) ~ W,
               jmCoxForm2 = Surv(obsT, delta==2) ~ W,
               timeVar = "v.time", data.long = da.long, data.id = da.id,
-              coxControl = list(n.iter = 2))
+              coxControl = list(n.iter = 30))
 
 est <- out$coefficients
 se <- out$se.coef
