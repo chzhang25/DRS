@@ -1,23 +1,22 @@
---- 
-title: "README" 
-output: github_document 
---- 
+README
+================
 
-```{r setup, include=FALSE} 
-knitr::opts_chunk$set(echo = TRUE) 
-``` 
-## Introduction 
+## Introduction
+
 XXX
 
-## Installation 
-You can install the development version of DRS using: 
-```{r eval=FALSE} 
+## Installation
+
+You can install the development version of DRS using:
+
+``` r
 library(devtools) 
 install_github("chzhang25/DRS", quiet = TRUE) 
-``` 
+```
 
-## Example 
-```{r eval=FALSE} 
+## Example
+
+``` r
 library(DRS) 
 ## load required data
 data(simda)
@@ -36,6 +35,6 @@ out <- DRS.JM(coxForm = ~ Lt1 + Lt2 + Lt3 + Lt4 + Lt5,
 est <- out$coefficients
 se <- out$se.coef
 print(round(cbind(est, se)[-grep("gammas.bs", names(est)), ], 3)) 
-``` 
+```
 
-## Reference 
+## Reference
