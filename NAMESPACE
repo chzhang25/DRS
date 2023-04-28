@@ -1,0 +1,8 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "IQR", "coef", "complete.cases", "dnorm",
+           "formula", "integrate", "model.frame", "model.matrix",
+           "model.response", "nlminb", "optim", "quantile",
+           "reformulate", "runif", "sigma", "terms")
+importFrom("utils", "as.relistable", "head", "lsf.str", "relist",
+           "tail")
+export("DRS.JM")

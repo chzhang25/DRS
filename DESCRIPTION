@@ -1,0 +1,11 @@
+Package: DRS
+Type: Package
+Title: Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival
+Version: 0.1.0
+Author: Cuihong Zhang, Ruosha Li <Ruosha.Li@uth.tmc.edu>
+Maintainer: Cuihong Zhang, Ruosha Li <Ruosha.Li@uth.tmc.edu>
+Description: Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival Endpoint Subject to Both Independent and Dependent Censoring
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+Depends: JM, lme4, dplyr, survival, nlme, Matrix, splines, SurvLong, MASS, matrixcalc, R (>= 3.5.0)
