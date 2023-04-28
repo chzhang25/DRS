@@ -55,7 +55,7 @@ out <- DRS.JM(coxForm = ~ Lt1 + Lt2 + Lt3 + Lt4 + Lt5,
               timeVar = "v.time", data.long = da.long, data.id = da.id,
               coxControl = list(n.iter = 30))
 
-est <- out$coefficients
+est <- out$coef
 se <- out$se.coef
 print(round(cbind(est, se)[-grep("gammas.bs", names(est)), ], 3))
 }

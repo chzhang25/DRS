@@ -38,14 +38,14 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
   for(iter in 1:coxCtr$n.iter){
     if(iter == 1){
       # init.coxbetas1
-      coxfit <- halfKernel(X = cbind(data.id[, idVar], survDat1), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
-                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn1, verbose = F)
+      coxfit <- suppressMessages(halfKernel(X = cbind(data.id[, idVar], survDat1), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
+                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn1, verbose = F))
       coxbetas1 <- coxfit$betaHat
       coxbetas1 <- norm1fun(coxbetas1[, !colnames(coxbetas1) %in% WVar]) ## remove estimator for baseline covariate, and normalize the estimators for individual risk factors
 
       # init.coxbetas2
-      coxfit <- halfKernel(X = cbind(data.id[, idVar], survDat2), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
-                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn2, verbose = F)
+      coxfit <- suppressMessages(halfKernel(X = cbind(data.id[, idVar], survDat2), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
+                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn2, verbose = F))
       coxbetas2 <- coxfit$betaHat
       coxbetas2 <- norm1fun(coxbetas2[, !colnames(coxbetas2) %in% WVar]) ## remove estimator for baseline covariate, and normalize the estimators for individual risk factors
 
@@ -151,7 +151,6 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
   } else {
     se.coef <- NA
   }
-
   return(list(coef = ThetasIter[nrow(ThetasIter), ], se.coef = se.coef, convergence = c(conv1, conv2), coef.iter = cbind(ThetasIter, jm.iter)))
 }
 
