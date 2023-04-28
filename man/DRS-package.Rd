@@ -5,7 +5,7 @@
   Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival
 }
 \description{
-  Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival Endpoint Subject to Both Independent and Dependent Censoring
+  Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival Subject to Both Independent and Dependent Censoring
 }
 
 \details{

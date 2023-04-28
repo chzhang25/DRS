@@ -38,14 +38,14 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
   for(iter in 1:coxCtr$n.iter){
     if(iter == 1){
       # init.coxbetas1
-      coxfit <- tryCatch(halfKernel(X = cbind(data.id[, idVar], survDat1), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
-                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn1, verbose = F), warning = function(w) NA, error = function(e) NA)
+      coxfit <- halfKernel(X = cbind(data.id[, idVar], survDat1), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
+                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn1, verbose = F)
       coxbetas1 <- coxfit$betaHat
       coxbetas1 <- norm1fun(coxbetas1[, !colnames(coxbetas1) %in% WVar]) ## remove estimator for baseline covariate, and normalize the estimators for individual risk factors
 
       # init.coxbetas2
-      coxfit <- tryCatch(halfKernel(X = cbind(data.id[, idVar], survDat2), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
-                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn2, verbose = F), warning = function(w) NA, error = function(e) NA)
+      coxfit <- halfKernel(X = cbind(data.id[, idVar], survDat2), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
+                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn2, verbose = F)
       coxbetas2 <- coxfit$betaHat
       coxbetas2 <- norm1fun(coxbetas2[, !colnames(coxbetas2) %in% WVar]) ## remove estimator for baseline covariate, and normalize the estimators for individual risk factors
 
@@ -53,12 +53,12 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
     } else {
       for(iter.cox in 1:3){
         # update coxbetas1
-        coxfit1 <- tryCatch(coxBetasEst(delta = 1, X = cbind(data.id[, idVar,drop=F], survDat1[, 1:2], jmcoxfit1$x), Lt = cbind(data.long[, c(idVar, timeVar)], Ltmat),
-                                        knowbetas = coxbetas2, tau = max(survDat1[,1], survDat2[,1]), h = hn1, kType = kType, thetas = list.jmpars, init.betas = coxbetas1, WVar = WVar), warning = function(w) w, error = function(e) NA)
+        coxfit1 <- coxBetasEst(delta = 1, X = cbind(data.id[, idVar,drop=F], survDat1[, 1:2], jmcoxfit1$x), Lt = cbind(data.long[, c(idVar, timeVar)], Ltmat),
+                                        knowbetas = coxbetas2, tau = max(survDat1[,1], survDat2[,1]), h = hn1, kType = kType, thetas = list.jmpars, init.betas = coxbetas1, WVar = WVar)
         coxbetas1 <- coxfit1$betaHat
         # update coxbetas2
-        coxfit2 <- tryCatch(coxBetasEst(delta = 2, X = cbind(data.id[, idVar,drop=F], survDat2[, 1:2], jmcoxfit2$x), Lt = cbind(data.long[, c(idVar, timeVar)], Ltmat),
-                                        knowbetas = coxbetas1, tau = max(survDat1[,1], survDat2[,1]), h = hn2, kType = kType, thetas = list.jmpars, init.betas = coxbetas2, WVar = WVar), warning = function(w) w, error = function(e) NA)
+        coxfit2 <- coxBetasEst(delta = 2, X = cbind(data.id[, idVar,drop=F], survDat2[, 1:2], jmcoxfit2$x), Lt = cbind(data.long[, c(idVar, timeVar)], Ltmat),
+                                        knowbetas = coxbetas1, tau = max(survDat1[,1], survDat2[,1]), h = hn2, kType = kType, thetas = list.jmpars, init.betas = coxbetas2, WVar = WVar)
         coxbetas2 <- coxfit2$betaHat
         result.cox <- rbind(result.cox, c(iter.cox, coxbetas1, coxbetas2))
       }
@@ -152,10 +152,11 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
     se.coef <- NA
   }
 
-  return(list(coefficients = ThetasIter[nrow(ThetasIter), ], varCov = varCov, se.coef = se.coef, convergence = c(conv1, conv2), coefs.iter = cbind(ThetasIter, jm.iter), coxfit1 = coxfit1, coxfit2 = coxfit2, jmfit = jmfit))
+  return(list(coef = ThetasIter[nrow(ThetasIter), ], se.coef = se.coef, convergence = c(conv1, conv2), coef.iter = cbind(ThetasIter, jm.iter)))
 }
 
 ## coxBetasEst (Part 1), modified estimation function (betaEST) from SurvLong R package to estimate normalized coxbetas
+## reference: Cao H., Churpek M. M., Zeng D., Fine J. P. (2015). Analysis of the proportional hazards model with sparse longitudinal covariates. Journal of the American Statistical Association, 110, 1187-1196.
 coxBetasEst <- function(Lt, delta, X, tau, h, thetas, init.betas = NULL, WVar, knowbetas,
                         kType = "epan", tol = 0.001, maxiter = 100){
   pre <- preprocessInputs(data.X = X, data.Lt = Lt)

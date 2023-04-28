@@ -1,5 +1,5 @@
 ## JM_modified, modified functions from JM package to accommodate the setting with two longitudinal risk scores and two events.
-
+## reference: Rizopoulos, D. (2010). JM: An R Package for the Joint Modelling of Longitudinal and Time-to-Event Data. Journal of Statistical Software, 35(9), 1–33. https://doi.org/10.18637/jss.v035.i09
 JM_modified <- function (lmeObject1, lmeObject2, survObject1, survObject2, timeVar, parameterization = c("value"),
                          method = c("spline-PH-aGH", "spline-PH-GH"), control = list(), ...) {
 

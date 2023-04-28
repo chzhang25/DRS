@@ -5,7 +5,7 @@
   Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival
 }
 \description{
-  Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival
+  Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival Subject to Both Independent and Dependent Censoring
 }
 \usage{
 DRS.JM(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, timeVar,
@@ -21,24 +21,16 @@ DRS.JM(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, timeVar,
   \item{timeVar}{a character to specify the time variable for the longitudinal risk factors}
   \item{data.long}{a data.frame for the longitudinal data}
   \item{data.id}{a data.frame for the survival data, i.e., one row per subject}
-  \item{kType}{the kernel method in SurvLong}
-  \item{coxControl}{control parameters for the XXX}
+  \item{kType}{the smoothing kernel used in the estimation function. Must be one of {"epan", "gauss"}, where "epan" is the Epanechnikov kernel and "gauss" is the Gaussian kernel.}
+  \item{coxControl}{control parameters for convergence criteria}
   \item{jmControl}{control parameters for the joint model}
-}
-\details{
-xxx
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 A list is returned with the following components:
-  \item{coefficients}{the estimated coefficients}
-  \item{varCov}{the variance-covariance matrix of the estimated parameters}
-  \item{se.coef}{the standard errors of the estimated coefficient, why length different with varCov}
-  \item{convergence}{a logic value to show the convergence of the algorithm}
-  \item{coefs.iter}{the estimated coefficients at each iteration}
-  \item{coxfit1}{a list containing the estimated...}
-  \item{coxfit2}{a list containing the estimated...}
-  \item{jmfit}{a list containing...}
+  \item{coef}{the estimated coefficients}
+  \item{se.coef}{the standard errors of the estimated coefficient}
+  \item{convergence}{two logic values to show the absolute and relative convergence of the algorithm}
+  \item{coef.iter}{the estimated coefficients at each iteration}
 }
 \references{
 Rizopoulos, D. (2010). JM: An R Package for the Joint Modelling of Longitudinal and Time-to-Event Data. Journal of Statistical Software, 35(9), 1–33. https://doi.org/10.18637/jss.v035.i09

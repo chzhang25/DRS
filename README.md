@@ -3,7 +3,14 @@ README
 
 ## Introduction
 
-XXX
+Modelling disease risk and survival using longitudinal risk factor
+trajectories is of interest in various clinical scenarios. We propose a
+dynamic risk score modeling framework for multiple longitudinal risk
+factors and survival in the presence of dependent censoring, where both
+events depend on participants’ post-baseline clinical progression. Our
+model requires relatively few random effects regardless of the number of
+longitudinal risk factors and can therefore accommodate multiple
+longitudinal risk factors in a parsimonious manner.
 
 ## Installation
 
@@ -38,3 +45,5 @@ print(round(cbind(est, se)[-grep("gammas.bs", names(est)), ], 3))
 ```
 
 ## Reference
+
+Reference will be added later if published
