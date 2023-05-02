@@ -15,7 +15,7 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
   WVar1 <- attr(terms(jmCoxForm1), "term.labels")     ## W variable name
   WVar2 <- attr(terms(jmCoxForm2), "term.labels")     ## W variable name
   if(!identical(WVar1, WVar2)){
-    stop("The RHS must be the same for the two jmCoxForm")
+    stop("The RHS must be the same for jmCoxForm1 and jmCoxForm2")
   }
   WVar <- WVar1
   if(identical(WVar, character(0))) WVar <- NULL    ## set as null if no W

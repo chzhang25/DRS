@@ -13,17 +13,17 @@ DRS.JM(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, timeVar,
        coxControl = list(), jmControl = list())
 }
 \arguments{
-  \item{coxForm}{a formula to integrate the multiple longitudinal risk factors}
-  \item{jmFixedForm}{a formula to specify the fixed effect of the longitudinal submodel in the joint model}
-  \item{jmRandomForm}{a formula to specify the random effect of the longitudinal submodel in the joint model}
-  \item{jmCoxForm1}{a formula to specify the main event submodel in the joint model}
-  \item{jmCoxForm2}{a formula to specify the dependent censoring event submodel in the joint model}
-  \item{timeVar}{a character to specify the time variable for the longitudinal risk factors}
-  \item{data.long}{a data.frame for the longitudinal data}
-  \item{data.id}{a data.frame for the survival data, i.e., one row per subject}
+  \item{coxForm}{a formula to integrate the multiple longitudinal risk factors. See Examples.}
+  \item{jmFixedForm}{a formula to specify the fixed effect of the longitudinal submodels in the joint model. See Examples.}
+  \item{jmRandomForm}{a formula to specify the random effect of the longitudinal submodels in the joint model. See Examples.}
+  \item{jmCoxForm1}{a formula to specify the fixed covariates included in the submodel for Event 1 in the joint model. See Examples.}
+  \item{jmCoxForm2}{a formula to specify the fixed covariates included in the submodel for Event 2 in the joint model. See Examples.}
+  \item{timeVar}{a character to specify the time variable for the longitudinal risk factors.}
+  \item{data.long}{a data.frame for the longitudinal data.}
+  \item{data.id}{a data.frame for the survival data, i.e., one row per subject.}
   \item{kType}{the smoothing kernel used in the estimation function. Must be one of {"epan", "gauss"}, where "epan" is the Epanechnikov kernel and "gauss" is the Gaussian kernel.}
-  \item{coxControl}{control parameters for convergence criteria}
-  \item{jmControl}{control parameters for the joint model}
+  \item{coxControl}{control parameters including convergence criterion, and the maximum number of interations.}
+  \item{jmControl}{control parameters for joint model part.}
 }
 \value{
 A list is returned with the following components:
@@ -44,18 +44,18 @@ Cuihong Zhang, Ruosha Li <Ruosha.Li@uth.tmc.edu>
 ## load required data
 data(simda)
 head(da.long)
-da.id <- subset(da.long, v.time==0)
+da.id <- subset(da.long, v.time == 0)
 
 ## fit the proposed model
 out <- DRS.JM(coxForm = ~ Lt1 + Lt2 + Lt3 + Lt4 + Lt5,
               jmFixedForm = ~ v.time + W,
               jmRandomForm = ~ v.time | id,
-              jmCoxForm1 = Surv(obsT, delta==1) ~ W,
-              jmCoxForm2 = Surv(obsT, delta==2) ~ W,
+              jmCoxForm1 = Surv(obsT, delta == 1) ~ W,
+              jmCoxForm2 = Surv(obsT, delta == 2) ~ W,
               timeVar = "v.time", data.long = da.long, data.id = da.id,
               coxControl = list(n.iter = 30))
 
-est <- out$coef
-se <- out$se.coef
-print(round(cbind(est, se)[-grep("gammas.bs", names(est)), ], 3))
+EST <- out$coef
+SE  <- out$se.coef
+print(round(cbind(EST, SE)[-grep("gammas.bs|D", names(EST)), ], 3))
 }
