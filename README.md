@@ -89,12 +89,10 @@ components in $\boldsymbol{\xi_1}$, whereas `Lt1_2`, `Lt2_2`, `Lt3_2`,
 `Lt4_2` and `Lt5_2` are the estimates of the components in
 $\boldsymbol{\xi_2}$.
 
-`gammas.bs.11 - gammas.bs.19` (not printed by default) are estimates for
-approximating log baseline hazards $h_{01}(t)$, whereas
-`gammas.bs.21 - gammas.bs.29` (not shown) are estimates for
-approximating log baseline hazards $h_{02}(t)$.
+Terms starting with `gammas.bs.1` and `gammas.bs.2` (not printed by default) are estimates for
+approximating log baseline hazards $h_{01}(t)$ and $h_{02}(t)$, respectively.
 
-`D1- D10` (not printed by default) are estimates for Choleski factors of
+`D1- D10` (not printed by default) are estimates related to
 the random effects covariance matrix ($\textbf{D}$).
 
 ## Reference
