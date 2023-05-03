@@ -34,11 +34,11 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
     message("> 2 kernel bandwidth were specified, only the first 2 will be used")
     bw <- bw[1:2]
   }
+  survDat1 <- jmcoxfit1$y
+  survDat2 <- jmcoxfit2$y
   if(is.null(bw)){
-    survDat1 <- jmcoxfit1$y
     effn1 <- sum(survDat1[, 2])
     hn1 <- 2 * IQR(data.long[[timeVar]]) * effn1^(-0.4)
-    survDat2 <- jmcoxfit2$y
     effn2 <- sum(survDat2[, 2])
     hn2 <- 2 * IQR(data.long[[timeVar]]) * effn2^(-0.4)
     bw <- c(hn1, hn2)
@@ -65,11 +65,11 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
       for(iter.cox in 1:3){
         # update coxbetas1
         coxfit1 <- coxBetasEst(delta = 1, X = cbind(data.id[, idVar,drop=F], survDat1[, 1:2], jmcoxfit1$x), Lt = cbind(data.long[, c(idVar, timeVar)], Ltmat),
-                                        knowbetas = coxbetas2, tau = max(survDat1[,1], survDat2[,1]), h = hn1, kType = kType, thetas = list.jmpars, init.betas = coxbetas1, WVar = WVar)
+                                        knowbetas = coxbetas2, tau = max(survDat1[,1], survDat2[,1]), h = bw[1], kType = kType, thetas = list.jmpars, init.betas = coxbetas1, WVar = WVar)
         coxbetas1 <- coxfit1$betaHat
         # update coxbetas2
         coxfit2 <- coxBetasEst(delta = 2, X = cbind(data.id[, idVar,drop=F], survDat2[, 1:2], jmcoxfit2$x), Lt = cbind(data.long[, c(idVar, timeVar)], Ltmat),
-                                        knowbetas = coxbetas1, tau = max(survDat1[,1], survDat2[,1]), h = hn2, kType = kType, thetas = list.jmpars, init.betas = coxbetas2, WVar = WVar)
+                                        knowbetas = coxbetas1, tau = max(survDat1[,1], survDat2[,1]), h = bw[2], kType = kType, thetas = list.jmpars, init.betas = coxbetas2, WVar = WVar)
         coxbetas2 <- coxfit2$betaHat
         result.cox <- rbind(result.cox, c(iter.cox, coxbetas1, coxbetas2))
       }
