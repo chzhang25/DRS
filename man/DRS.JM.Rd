@@ -22,6 +22,7 @@ DRS.JM(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, timeVar,
   \item{data.long}{a data.frame for the longitudinal data.}
   \item{data.id}{a data.frame for the survival data, i.e., one row per subject.}
   \item{kType}{the smoothing kernel used in the estimation function. Must be one of {"epan", "gauss"}, where "epan" is the Epanechnikov kernel and "gauss" is the Gaussian kernel.}
+  \item{bw}{bandwidth values for the smoothing kernel. If NULL, the bandwidth will be determined using 2*(Q3 - Q1)*n^-0.4}
   \item{coxControl}{control parameters including convergence criterion, and the maximum number of interations.}
   \item{jmControl}{control parameters for joint model part.}
 }
@@ -33,6 +34,8 @@ A list is returned with the following components:
   \item{coef.iter}{the estimated coefficients at each iteration}
 }
 \references{
+Cuihong Zhang, Jing Ning, Jianwen Cai, James E. Squires, Steven H. Belle & Ruosha Li (2023). Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival [Manuscript submitted for publication]
+
 Rizopoulos, D. (2010). JM: An R Package for the Joint Modelling of Longitudinal and Time-to-Event Data. Journal of Statistical Software, 35(9), 1–33. https://doi.org/10.18637/jss.v035.i09
 
 Hongyuan Cao, Mathew M. Churpek, Donglin Zeng & Jason P. Fine (2015) Analysis of the Proportional Hazards Model With Sparse Longitudinal Covariates, Journal of the American Statistical Association, 110:511, 1187-1196, DOI: 10.1080/01621459.2014.957289
@@ -54,8 +57,5 @@ out <- DRS.JM(coxForm = ~ Lt1 + Lt2 + Lt3 + Lt4 + Lt5,
               jmCoxForm2 = Surv(obsT, delta == 2) ~ W,
               timeVar = "v.time", data.long = da.long, data.id = da.id,
               coxControl = list(n.iter = 30))
-
-EST <- out$coef
-SE  <- out$se.coef
-print(round(cbind(EST, SE)[-grep("gammas.bs|D", names(EST)), ], 3))
+out
 }

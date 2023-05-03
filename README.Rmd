@@ -35,33 +35,36 @@ out <- DRS.JM(coxForm = ~ Lt1 + Lt2 + Lt3 + Lt4 + Lt5,
               jmCoxForm2 = Surv(obsT, delta == 2) ~ W,
               timeVar = "v.time", data.long = da.long, data.id = da.id,
               coxControl = list(n.iter = 30))
-EST <- out$coef
-SE  <- out$se.coef
-print(round(cbind(EST, SE)[-grep("gammas.bs|D", names(EST)), ], 3)) 
-
-#                        EST    SE
-# betas.(Intercept)_1  0.225 0.089
-# betas.v.time_1       0.195 0.024
-# betas.W_1           -0.089 0.050
-# betas.(Intercept)_2 -0.233 0.090
-# betas.v.time_2       0.414 0.030
-# betas.W_2            0.059 0.049
-# log.sigma1          -1.238 0.090
-# log.sigma2          -1.142 0.115
-# gammas1.W           -0.239 0.076
-# alpha1               1.402 0.106
-# gammas2.W            0.064 0.077
-# alpha2               1.151 0.118
-# Lt1_1                0.316 0.055
-# Lt2_1                0.517 0.029
-# Lt3_1               -0.409 0.053
-# Lt4_1                0.477 0.021
-# Lt5_1                0.487 0.030
-# Lt1_2                0.310 0.075
-# Lt2_2                0.495 0.036
-# Lt3_2               -0.423 0.061
-# Lt4_2                0.254 0.033
-# Lt5_2                0.645 0.034
+out
+# Call:
+# DRS.JM(coxForm = ~Lt1 + Lt2 + Lt3 + Lt4 + Lt5, jmFixedForm = ~v.time + 
+#     W, jmRandomForm = ~v.time | id, jmCoxForm1 = Surv(obsT, delta == 
+#     1) ~ W, jmCoxForm2 = Surv(obsT, delta == 2) ~ W, timeVar = "v.time", 
+#     data.long = da.long, data.id = da.id, coxControl = list(n.iter = 30))
+# 
+#                     Estimate StdErr  z value Pr(>|z|)
+# betas.(Intercept)_1   0.2249 0.0890   2.5259   0.0115
+# betas.v.time_1        0.1948 0.0237   8.2344   0.0000
+# betas.W_1            -0.0892 0.0498  -1.7905   0.0734
+# betas.(Intercept)_2  -0.2327 0.0899  -2.5895   0.0096
+# betas.v.time_2        0.4136 0.0304  13.6221   0.0000
+# betas.W_2             0.0587 0.0487   1.2059   0.2279
+# log.sigma1           -1.2379 0.0904 -13.6898   0.0000
+# log.sigma2           -1.1423 0.1149  -9.9391   0.0000
+# gammas1.W            -0.2387 0.0760  -3.1428   0.0017
+# alpha1                1.4017 0.1055  13.2812   0.0000
+# gammas2.W             0.0640 0.0765   0.8365   0.4029
+# alpha2                1.1514 0.1183   9.7292   0.0000
+# Lt1_1                 0.3160 0.0551   5.7304   0.0000
+# Lt2_1                 0.5173 0.0288  17.9356   0.0000
+# Lt3_1                -0.4094 0.0531  -7.7037   0.0000
+# Lt4_1                 0.4774 0.0209  22.8330   0.0000
+# Lt5_1                 0.4868 0.0303  16.0643   0.0000
+# Lt1_2                 0.3101 0.0747   4.1529   0.0000
+# Lt2_2                 0.4945 0.0360  13.7499   0.0000
+# Lt3_2                -0.4230 0.0606  -6.9789   0.0000
+# Lt4_2                 0.2544 0.0328   7.7450   0.0000
+# Lt5_2                 0.6447 0.0339  18.9984   0.0000
 ``` 
 `betas.(Intercept)_1`, `betas.v.time_1` and `betas.W_1` are the estimates for fixed effects $\boldsymbol{\beta_1}$ of the longitudinal risk score of Event 1, whereas `betas.(Intercept)_2`, `betas.v.time_2` and `betas.W_2` are the estimates for fixed effects $\boldsymbol{\beta_2}$ of longitudinal risk score of Event 2.
 
@@ -71,9 +74,9 @@ print(round(cbind(EST, SE)[-grep("gammas.bs|D", names(EST)), ], 3))
 
 `Lt1_1`, `Lt2_1`, `Lt3_1`, `Lt4_1` and `Lt5_1` are the estimates of the components in $\boldsymbol{\xi_1}$, whereas `Lt1_2`, `Lt2_2`, `Lt3_2`, `Lt4_2` and `Lt5_2` are the estimates of the components in $\boldsymbol{\xi_2}$.
 
-`gammas.bs.11 - gammas.bs.19` (not shown) are estimates for approximating log baseline hazards $h_{01}(t)$, whereas `gammas.bs.21 - gammas.bs.29` (not shown) are estimates for approximating log baseline hazards $h_{02}(t)$.
+`gammas.bs.11 - gammas.bs.19` (not printed by default) are estimates for approximating log baseline hazards $h_{01}(t)$, whereas `gammas.bs.21 - gammas.bs.29` (not shown) are estimates for approximating log baseline hazards $h_{02}(t)$.
 
-`D1- D10` (not shown) are estimates for Choleski factors of the random effects covariance matrix ($\textbf{D}$).
+`D1- D10` (not printed by default) are estimates for Choleski factors of the random effects covariance matrix ($\textbf{D}$).
 
 ## Reference 
 Cuihong Zhang, Jing Ning, Jianwen Cai, James E. Squires, Steven H. Belle & Ruosha Li (2023). Dynamic Risk Score Modeling for Multiple Longitudinal Risk Factors and Survival [Manuscript submitted for publication]

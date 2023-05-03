@@ -6,3 +6,4 @@ importFrom("stats", "IQR", "coef", "complete.cases", "dnorm",
 importFrom("utils", "as.relistable", "head", "lsf.str", "relist",
            "tail")
 export("DRS.JM")
+S3method("print","DRS")

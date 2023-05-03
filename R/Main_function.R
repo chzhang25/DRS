@@ -4,8 +4,8 @@
 ## JM_modified (Part 2), modified estimation function from JM package to accommodate the setting with two longitudinal risk scores and two events. Name the estimators as jmpars.
 ## Score2Y, score functions.
 
-DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, timeVar, data.long, data.id, kType = "epan", coxControl = list(), jmControl = list()){
-
+DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, timeVar, data.long, data.id, kType = "epan", bw = NULL, coxControl = list(), jmControl = list()){
+  call <- match.call()
   ## Control parameters
   coxCtr <- list(n.iter = 4, tol0 = 0.005, tol1 = 0.0015, tol2 = 0.005)
   coxCtr[names(coxControl)] <- coxControl
@@ -26,12 +26,23 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
   jmcoxfit2 <- coxph(jmCoxForm2, data = data.id, x = TRUE)
 
   ## calculate hn
-  survDat1 <- jmcoxfit1$y
-  effn1 <- sum(survDat1[, 2])
-  hn1 <- 2 * IQR(data.long[[timeVar]]) * effn1^(-0.4)
-  survDat2 <- jmcoxfit2$y
-  effn2 <- sum(survDat2[, 2])
-  hn2 <- 2 * IQR(data.long[[timeVar]]) * effn2^(-0.4)
+  if(length(bw) == 1) {
+    message("Only 1 kernel bandwidth was specified, this value will be used for both models")
+    bw <- rep(bw, 2)
+  }
+  if(length(bw) > 2) {
+    message("> 2 kernel bandwidth were specified, only the first 2 will be used")
+    bw <- bw[1:2]
+  }
+  if(is.null(bw)){
+    survDat1 <- jmcoxfit1$y
+    effn1 <- sum(survDat1[, 2])
+    hn1 <- 2 * IQR(data.long[[timeVar]]) * effn1^(-0.4)
+    survDat2 <- jmcoxfit2$y
+    effn2 <- sum(survDat2[, 2])
+    hn2 <- 2 * IQR(data.long[[timeVar]]) * effn2^(-0.4)
+    bw <- c(hn1, hn2)
+  }
 
   ## updating coxbetas and jmpars
   ThetasIter <- result.cox <- jm.iter <- NULL # store all parameters for each iteration
@@ -39,13 +50,13 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
     if(iter == 1){
       # init.coxbetas1
       coxfit <- suppressMessages(halfKernel(X = cbind(data.id[, idVar], survDat1), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
-                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn1, verbose = F))
+                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = bw[1], verbose = F))
       coxbetas1 <- coxfit$betaHat
       coxbetas1 <- norm1fun(coxbetas1[, !colnames(coxbetas1) %in% WVar]) ## remove estimator for baseline covariate, and normalize the estimators for individual risk factors
 
       # init.coxbetas2
       coxfit <- suppressMessages(halfKernel(X = cbind(data.id[, idVar], survDat2), Z = cbind(data.long[, c(idVar, timeVar, WVar)], Ltmat),
-                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = hn2, verbose = F))
+                                    tau = max(survDat1[,1], survDat2[,1]), kType = kType, bw = bw[2], verbose = F))
       coxbetas2 <- coxfit$betaHat
       coxbetas2 <- norm1fun(coxbetas2[, !colnames(coxbetas2) %in% WVar]) ## remove estimator for baseline covariate, and normalize the estimators for individual risk factors
 
@@ -151,7 +162,9 @@ DRS.JM <- function(coxForm, jmFixedForm, jmRandomForm, jmCoxForm1, jmCoxForm2, t
   } else {
     se.coef <- NA
   }
-  return(list(coef = ThetasIter[nrow(ThetasIter), ], se.coef = se.coef, convergence = c(conv1, conv2), coef.iter = cbind(ThetasIter, jm.iter)))
+  result <- list(coef = ThetasIter[nrow(ThetasIter), ], se.coef = se.coef, convergence = c(conv1, conv2), coef.iter = cbind(ThetasIter, jm.iter), call = call)
+  class(result) <- "DRS"
+  return(result)
 }
 
 ## coxBetasEst (Part 1), modified estimation function (betaEST) from SurvLong R package to estimate normalized coxbetas
