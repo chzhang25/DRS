@@ -77,12 +77,12 @@ and `betas.W_2` are the estimates for fixed effects
 $\boldsymbol{\beta_2}$ of longitudinal risk score of Event 2.
 
 `log.sigma1` and `log.sigma2` are the estimates of $log(\sigma_1)$ and
-$log(\sigma_2)$ separately.
+$log(\sigma_2)$, respectively.
 
 `gammas1.W` and `gammas2.W` are the estimates for
-$\boldsymbol{\gamma_1}$ and $\boldsymbol{\gamma_2}$ separately. `alpha1`
+$\boldsymbol{\gamma_1}$ and $\boldsymbol{\gamma_2}$, respectively. `alpha1`
 and `alpha2` are the estimates for $\boldsymbol{\alpha_1}$ and
-$\boldsymbol{\alpha_2}$ separately.
+$\boldsymbol{\alpha_2}$, respectively.
 
 `Lt1_1`, `Lt2_1`, `Lt3_1`, `Lt4_1` and `Lt5_1` are the estimates of the
 components in $\boldsymbol{\xi_1}$, whereas `Lt1_2`, `Lt2_2`, `Lt3_2`,
